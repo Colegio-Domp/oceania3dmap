@@ -72,7 +72,7 @@ export function Terrain({ layer, timeline }: TerrainProps) {
     const attr = geometry.getAttribute("color") as THREE.BufferAttribute;
     const arr = attr.array as Float32Array;
     for (let idx = 0; idx < samples.length; idx++) {
-      const c = layerColor(layer, samples[idx], lats[idx], timeline);
+      const c = layerColor(layer, samples[idx]!, lats[idx]!, timeline);
       arr[idx * 3] = c[0];
       arr[idx * 3 + 1] = c[1];
       arr[idx * 3 + 2] = c[2];

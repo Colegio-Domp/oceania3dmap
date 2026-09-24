@@ -87,7 +87,7 @@ export function Markers({ layer, timeline, selectedVolcano, onSelectVolcano }: P
                     flatShading
                   />
                 </mesh>
-                <group ref={active ? glowRef : undefined} position={[0, size * 1.1, 0]}>
+                <group ref={active ? glowRef : null} position={[0, size * 1.1, 0]}>
                   <mesh>
                     <sphereGeometry args={[size * 0.34, 10, 10]} />
                     <meshBasicMaterial
