@@ -54,7 +54,7 @@ export function Terrain({ layer, timeline }: TerrainProps) {
         const b = a + 1;
         const c = a + COLS;
         const d = c + 1;
-        indices.push(a, c, b, b, c, d);
+        indices.push(a, b, c, b, d, c);
       }
     }
 
@@ -81,7 +81,7 @@ export function Terrain({ layer, timeline }: TerrainProps) {
   }, [geometry, samples, lats, layer, timeline]);
 
   // exagero vertical suave por camada
-  const targetScale = layer === "relief" ? 1.45 : layer === "ocean" ? 1.15 : 1;
+  const targetScale = layer === "relief" ? 1.25 : layer === "ocean" ? 1 : 0.8;
   useFrame((_, delta) => {
     const mesh = meshRef.current;
     if (!mesh) return;

@@ -29,7 +29,7 @@ export function Markers({ layer, timeline, selectedVolcano, onSelectVolcano }: P
         x: lonToX(v.lon),
         z: latToZ(v.lat),
         y: Math.max(sampleTerrain(v.lon, v.lat).h, 0.02),
-        size: 0.1 + (v.height / 3000) * 0.28,
+        size: 0.05 + (v.height / 3000) * 0.12,
       })),
     [],
   );
