@@ -223,7 +223,7 @@ export function sampleTerrain(lon: number, lat: number): Sample {
 
   const coastNoise = fbm(lon * 0.42 + 11, lat * 0.42 - 7, 4) - 0.5;
   const land = mask + 0.2 * coastNoise;
-  const shore = smoothstep(0.4, 0.55, land);
+  const shore = smoothstep(0.38, 0.56, land);
 
   // terra
   let mountains = 0;
@@ -238,7 +238,7 @@ export function sampleTerrain(lon: number, lat: number): Sample {
 
   // oceano
   const shelf = clamp(land / 0.4);
-  let depth = -(0.14 + 0.95 * (1 - shelf) + 0.06 * detail);
+  let depth = -(0.03 + 1.05 * Math.pow(1 - shelf, 1.6) + 0.05 * detail);
   for (const t of TRENCHES) depth -= 0.85 * blobWeight(t, lon, lat) * (1 - shore);
 
   const h = shore * landH + (1 - shore) * depth;
