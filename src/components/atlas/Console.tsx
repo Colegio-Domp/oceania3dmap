@@ -74,7 +74,7 @@ export function Console() {
         </div>
 
         <div className="mt-4 flex flex-1 justify-between gap-4 overflow-hidden">
-          <div className="flex w-[306px] flex-col gap-3">
+          <div className="pointer-events-auto flex w-[306px] flex-col gap-3 overflow-y-auto">
             <Panel title="MAP" code="2D → 3D">
               <MapPanel layer={layer} timeline={timeline} region={region} onSelect={(r) => { setRegion(r); setVolcano(null); }} />
               <div className="mt-2 grid grid-cols-3 gap-1">

@@ -115,7 +115,7 @@ export function Terrain({ layer, timeline }: TerrainProps) {
           vertexColors
           roughness={0.85}
           metalness={0.02}
-          envMapIntensity={0.6}
+          envMapIntensity={0.25}
         />
       </mesh>
 

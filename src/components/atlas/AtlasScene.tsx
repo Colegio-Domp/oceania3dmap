@@ -59,11 +59,13 @@ export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectV
       <fog attach="fog" args={["#05070d", 30, 70]} />
 
       <hemisphereLight args={["#7fb6ff", "#0b1220", 0.55]} />
-      <ambientLight intensity={0.35} />
+      <ambientLight intensity={0.2} />
       <directionalLight
         position={[9, 14, 8]}
         intensity={1.5}
         castShadow
+        shadow-bias={-0.0008}
+        shadow-normalBias={0.04}
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-camera-left={-18}
@@ -94,16 +96,16 @@ export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectV
       ))}
 
       <Environment resolution={128}>
-        <Lightformer intensity={2} position={[0, 6, 0]} rotation-x={Math.PI / 2} scale={[14, 14, 1]} />
-        <Lightformer intensity={1.2} color="#7fd4ff" position={[-8, 2, -2]} rotation-y={Math.PI / 2} scale={[20, 2, 1]} />
-        <Lightformer intensity={0.8} color="#ffb070" position={[8, 2, 3]} rotation-y={-Math.PI / 2} scale={[20, 2, 1]} />
+        <Lightformer intensity={0.6} position={[0, 6, 0]} rotation-x={Math.PI / 2} scale={[14, 14, 1]} />
+        <Lightformer intensity={0.4} color="#7fd4ff" position={[-8, 2, -2]} rotation-y={Math.PI / 2} scale={[20, 2, 1]} />
+        <Lightformer intensity={0.3} color="#ffb070" position={[8, 2, 3]} rotation-y={-Math.PI / 2} scale={[20, 2, 1]} />
       </Environment>
       <Stars radius={60} depth={30} count={1800} factor={2.5} fade speed={0.4} />
       <Sparkles count={70} scale={[24, 3, 20]} position={[0, 1.5, 0]} size={2} speed={0.25} color="#8fe9ff" opacity={0.5} />
 
       <EffectComposer multisampling={0}>
         <SMAA />
-        <Bloom intensity={0.7} luminanceThreshold={0.75} luminanceSmoothing={0.2} mipmapBlur />
+        <Bloom intensity={0.6} luminanceThreshold={0.9} luminanceSmoothing={0.2} mipmapBlur />
         <Vignette offset={0.25} darkness={0.7} />
       </EffectComposer>
 
