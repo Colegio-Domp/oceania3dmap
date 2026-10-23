@@ -122,8 +122,8 @@ export function Terrain({ layer, timeline }: TerrainProps) {
       <Water level={sea} oceanMode={oceanMode} />
 
       {/* base da maquete */}
-      <mesh position={[0, -1.25, 0]}>
-        <boxGeometry args={[(LON_MAX - LON_MIN) * SCALE + 0.3, 2.5, (LAT_MAX - LAT_MIN) * SCALE + 0.3]} />
+      <mesh position={[0, -3.3, 0]}>
+        <boxGeometry args={[(LON_MAX - LON_MIN) * SCALE + 0.3, 2, (LAT_MAX - LAT_MIN) * SCALE + 0.3]} />
         <meshStandardMaterial color="#0a1a26" roughness={0.4} metalness={0.5} />
       </mesh>
     </group>
