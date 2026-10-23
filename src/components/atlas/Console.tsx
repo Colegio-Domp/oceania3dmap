@@ -74,7 +74,7 @@ export function Console() {
         </div>
 
         <div className="mt-4 flex flex-1 justify-between gap-4 overflow-hidden">
-          <div className="flex w-[306px] flex-col gap-3">
+          <div className="pointer-events-auto flex w-[306px] flex-col gap-3 overflow-y-auto">
             <Panel title="MAP" code="2D → 3D">
               <MapPanel layer={layer} timeline={timeline} region={region} onSelect={(r) => { setRegion(r); setVolcano(null); }} />
               <div className="mt-2 grid grid-cols-3 gap-1">
@@ -108,6 +108,7 @@ export function Console() {
                 ))}
               </div>
               <p className="mt-2 text-xs text-muted-foreground">{LAYERS.find((l) => l.id === layer)?.hint}</p>
+              <Legend layer={layer} />
             </Panel>
           </div>
 
@@ -182,6 +183,33 @@ export function Console() {
           </p>
         </Panel>
       </div>
+    </div>
+  );
+}
+
+const LEGENDS: Record<LayerId, { title: string; items: [string, string][]; tip: string }> = {
+  relief: { title: "ALTITUDE", items: [["#6b7350", "Planícies 0–300 m"], ["#8c6b3d", "Planaltos 300–1.000 m"], ["#7a5742", "Montanhas 1–2 km"], ["#d1d6e0", "Picos acima de 2 km"]], tip: "A altura está exagerada para o relevo ficar visível. Sombras mostram as encostas." },
+  climate: { title: "ZONAS CLIMÁTICAS", items: [["#1a804d", "Tropical úmido"], ["#c79938", "Árido / semiárido"], ["#3d8573", "Temperado"], ["#b8cce6", "Frio de montanha"]], tip: "O Trópico de Capricórnio corta o centro árido da Austrália." },
+  vegetation: { title: "COBERTURA VEGETAL", items: [["#0d5c29", "Floresta tropical"], ["#245738", "Floresta temperada"], ["#9e8c33", "Savana"], ["#b88f52", "Deserto"]], tip: "Quanto mais longe do mar, menos chuva e menos vegetação." },
+  ocean: { title: "PROFUNDIDADE", items: [["#33bfc7", "Recifes e águas rasas"], ["#14527a", "Plataforma continental"], ["#0a2952", "Oceano profundo"], ["#03051a", "Fossas (até 10 km)"]], tip: "As fossas surgem onde uma placa mergulha sob a outra." },
+  volcano: { title: "VULCANISMO", items: [["#ff6a2b", "Vulcão ativo"], ["#ffb347", "Brilho = atividade"], ["#3a3a44", "Terra (realce neutro)"]], tip: "O Anel de Fogo acompanha as bordas das placas tectônicas." },
+  population: { title: "OCUPAÇÃO", items: [["#38e8ff", "Cidade (tamanho = população)"], ["#2a3346", "Áreas pouco habitadas"]], tip: "Mova a linha do tempo para ver as cidades crescerem no litoral." },
+};
+
+function Legend({ layer }: { layer: LayerId }) {
+  const l = LEGENDS[layer];
+  return (
+    <div className="mt-3 border-t border-line pt-2">
+      <div className="font-mono text-[9px] tracking-[0.2em] text-accent/80">LEGENDA · {l.title}</div>
+      <ul className="mt-1 space-y-1">
+        {l.items.map(([c, t]) => (
+          <li key={t} className="flex items-center gap-2 text-xs text-foreground/85">
+            <span className="h-2.5 w-5 rounded-sm border border-line" style={{ background: c }} />
+            {t}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-2 text-[11px] leading-snug text-muted-foreground">{l.tip}</p>
     </div>
   );
 }
