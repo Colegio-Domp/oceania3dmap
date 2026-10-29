@@ -22,7 +22,7 @@ const ROWS = 244;
 interface TerrainProps {
   layer: LayerId;
   timeline: number;
-  onHover?: (x: number, z: number, h: number | null) => void;
+  onHover?: ((x: number, z: number, h: number | null) => void) | undefined;
 }
 
 export function Terrain({ layer, timeline, onHover }: TerrainProps) {

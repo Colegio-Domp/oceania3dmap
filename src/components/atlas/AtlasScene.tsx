@@ -19,7 +19,7 @@ interface Props {
   region: Region;
   selectedVolcano: string | null;
   onSelectVolcano: (v: Volcano) => void;
-  onHover?: (x: number, z: number, h: number | null) => void;
+  onHover?: ((x: number, z: number, h: number | null) => void) | undefined;
 }
 
 function RegionFrame({ region }: { region: Region }) {
