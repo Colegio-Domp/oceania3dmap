@@ -287,10 +287,17 @@ export function layerColor(
 
   switch (layer) {
     case "relief": {
-      let c = mix([0.42, 0.45, 0.3], [0.55, 0.42, 0.24], smoothstep(0, 0.3, alt));
-      c = mix(c, [0.48, 0.34, 0.26], smoothstep(0.3, 0.6, alt));
-      c = mix(c, [0.82, 0.84, 0.88], smoothstep(0.62, 0.95, alt));
-      return c;
+      // paleta de imagem de satélite: floresta úmida, savana, deserto vermelho, rocha e neve
+      const v = 0.5 + 0.5 * Math.sin(s.h * 91 + lat * 7.3) * Math.cos(lat * 13.1 + s.arid * 40);
+      const wet: RGB = absLat < 20 ? [0.12, 0.27, 0.12] : [0.2, 0.32, 0.17];
+      const savanna: RGB = [0.5, 0.45, 0.26];
+      const outback: RGB = [0.66, 0.38, 0.2];
+      let c = mix(wet, savanna, smoothstep(0.2, 0.55, s.arid));
+      c = mix(c, outback, smoothstep(0.55, 0.9, s.arid));
+      c = mix(c, [0.36, 0.33, 0.28], smoothstep(0.35, 0.65, alt));
+      c = mix(c, [0.93, 0.94, 0.96], smoothstep(0.7, 0.95, alt + (absLat > 38 ? 0.15 : 0)));
+      const j = 0.9 + 0.2 * v;
+      return [c[0] * j, c[1] * j, c[2] * j];
     }
     case "climate": {
       // tropical úmido -> árido -> temperado -> alpino

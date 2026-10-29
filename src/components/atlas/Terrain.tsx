@@ -22,9 +22,10 @@ const ROWS = 244;
 interface TerrainProps {
   layer: LayerId;
   timeline: number;
+  onHover?: (x: number, z: number, h: number | null) => void;
 }
 
-export function Terrain({ layer, timeline }: TerrainProps) {
+export function Terrain({ layer, timeline, onHover }: TerrainProps) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   const { geometry, samples, lats } = useMemo(() => {
@@ -110,12 +111,14 @@ export function Terrain({ layer, timeline }: TerrainProps) {
 
   return (
     <group>
-      <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
+      <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow
+        onPointerMove={(e) => onHover?.(e.point.x, e.point.z, e.point.y / (meshRef.current?.scale.y || 1))}
+        onPointerOut={() => onHover?.(0, 0, null)}>
         <meshStandardMaterial
           vertexColors
-          roughness={0.85}
-          metalness={0.02}
-          envMapIntensity={0.25}
+          roughness={0.92}
+          metalness={0}
+          envMapIntensity={0.5}
         />
       </mesh>
 
@@ -173,8 +176,8 @@ function Water({ level, oceanMode }: { level: number; oceanMode: boolean }) {
     () => ({
       uTime: { value: 0 },
       uOpacity: { value: 0.55 },
-      uDeep: { value: new THREE.Color("#06243a") },
-      uShallow: { value: new THREE.Color("#1a6f8f") },
+      uDeep: { value: new THREE.Color("#0a3550") },
+      uShallow: { value: new THREE.Color("#2a8aa6") },
     }),
     [],
   );
