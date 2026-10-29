@@ -78,16 +78,16 @@ export function Console() {
         </Suspense>
       </Canvas>
 
-      <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-sm border border-line bg-panel/85 px-4 py-2 text-center font-mono text-[11px] tracking-wider text-foreground backdrop-blur-md">
+      <div className="pointer-events-none absolute top-3 left-1/2 z-10 -translate-x-1/2 rounded-sm border border-line bg-panel/85 px-4 py-2 text-center font-mono text-[11px] tracking-wider text-foreground backdrop-blur-md">
         <div ref={readout} className="text-accent">Passe o mouse sobre a maquete</div>
-        <div className="mt-1 text-[10px] text-muted-foreground">Arraste: girar · Botão direito: mover · Roda: zoom · Teclas 1–6: camadas · ←/→: tempo</div>
+        <div className="mt-1 text-[10px] text-muted-foreground">Arraste: girar · Botão direito: mover · Roda: zoom · Teclas 1–6: camadas · setas: tempo</div>
       </div>
 
       {/* HUD */}
       <div className="pointer-events-none absolute inset-0 flex flex-col p-4">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-[0.3em] text-foreground">
+            <h1 className="font-display text-2xl font-bold tracking-[0.3em] text-foreground [text-shadow:0_1px_6px_var(--background)]">
               OCEANIA <span className="text-accent">4D</span>
             </h1>
             <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground">
