@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   ERAS,
@@ -12,6 +12,7 @@ import {
   CITIES,
   cityGrowth,
   HEIGHT_UNIT_KM,
+  SCALE,
 } from "@/lib/oceania";
 import { AtlasScene } from "./AtlasScene";
 import { MapPanel } from "./MapPanel";
@@ -34,6 +35,28 @@ export function Console() {
   const [region, setRegion] = useState<Region>(REGIONS[0]!);
   const [volcano, setVolcano] = useState<Volcano | null>(null);
 
+  const readout = useRef<HTMLDivElement>(null);
+  const onHover = (x: number, z: number, h: number | null) => {
+    const el = readout.current;
+    if (!el) return;
+    if (h === null) { el.textContent = "Passe o mouse sobre a maquete"; return; }
+    const lon = x / SCALE + 150;
+    const lat = -z / SCALE - 16;
+    const m = Math.round(h * HEIGHT_UNIT_KM * 1000);
+    el.textContent = `${Math.abs(lat).toFixed(2)}°${lat < 0 ? "S" : "N"}  ${(lon > 180 ? 360 - lon : lon).toFixed(2)}°${lon > 180 ? "W" : "E"}  ·  ${m >= 0 ? "ALT" : "PROF"} ${Math.abs(m).toLocaleString("pt-BR")} m`;
+  };
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.tagName === "INPUT") return;
+      const n = Number(e.key);
+      if (n >= 1 && n <= LAYERS.length) setLayer(LAYERS[n - 1]!.id);
+      if (e.key === "ArrowRight") setTimeline((t) => Math.min(1, t + 0.05));
+      if (e.key === "ArrowLeft") setTimeline((t) => Math.max(0, t - 0.05));
+    };
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, []);
+
   const era = ERAS.reduce((best, e) => (Math.abs(e.t - timeline) < Math.abs(best.t - timeline) ? e : best), ERAS[0]!);
   const urbanPop = CITIES.reduce((s, c) => s + (cityGrowth(c, timeline) > 0 ? c.pop * cityGrowth(c, timeline) : 0), 0);
 
@@ -50,15 +73,21 @@ export function Console() {
               setVolcano(v);
               setLayer("volcano");
             }}
+            onHover={onHover}
           />
         </Suspense>
       </Canvas>
+
+      <div className="pointer-events-none absolute top-3 left-1/2 z-10 -translate-x-1/2 rounded-sm border border-line bg-panel/85 px-4 py-2 text-center font-mono text-[11px] tracking-wider text-foreground backdrop-blur-md">
+        <div ref={readout} className="text-accent">Passe o mouse sobre a maquete</div>
+        <div className="mt-1 text-[10px] text-muted-foreground">Arraste: girar · Botão direito: mover · Roda: zoom · Teclas 1–6: camadas · setas: tempo</div>
+      </div>
 
       {/* HUD */}
       <div className="pointer-events-none absolute inset-0 flex flex-col p-4">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="font-display text-2xl font-bold tracking-[0.3em] text-foreground">
+            <h1 className="font-display text-2xl font-bold tracking-[0.3em] text-foreground [text-shadow:0_1px_6px_var(--background)]">
               OCEANIA <span className="text-accent">4D</span>
             </h1>
             <p className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground">

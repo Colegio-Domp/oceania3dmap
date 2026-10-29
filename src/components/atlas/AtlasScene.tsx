@@ -1,13 +1,8 @@
 import { useMemo } from "react";
-import { Environment, Html, Lightformer, Line, Sparkles, Stars } from "@react-three/drei";
+import { Environment, Html, Lightformer, Line, Sky } from "@react-three/drei";
 import { Bloom, EffectComposer, SMAA, Vignette } from "@react-three/postprocessing";
 import { REGIONS } from "@/lib/oceania";
 import {
-  LAT_MAX,
-  LAT_MIN,
-  LON_MAX,
-  LON_MIN,
-  SCALE,
   type LayerId,
   type Region,
   type Volcano,
@@ -24,6 +19,7 @@ interface Props {
   region: Region;
   selectedVolcano: string | null;
   onSelectVolcano: (v: Volcano) => void;
+  onHover?: ((x: number, z: number, h: number | null) => void) | undefined;
 }
 
 function RegionFrame({ region }: { region: Region }) {
@@ -46,7 +42,7 @@ function RegionFrame({ region }: { region: Region }) {
   return <Line points={points} color="#38e8ff" lineWidth={1.4} transparent opacity={0.75} />;
 }
 
-export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectVolcano }: Props) {
+export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectVolcano, onHover }: Props) {
   const target: [number, number, number] = [
     lonToX(region.center[0]),
     0,
@@ -55,14 +51,14 @@ export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectV
 
   return (
     <>
-      <color attach="background" args={["#05070d"]} />
-      <fog attach="fog" args={["#05070d", 30, 70]} />
+      <Sky distance={450} sunPosition={[9, 6, 8]} turbidity={6} rayleigh={1.6} mieCoefficient={0.004} mieDirectionalG={0.85} />
+      <fog attach="fog" args={["#a9c3d6", 35, 90]} />
 
-      <hemisphereLight args={["#7fb6ff", "#0b1220", 0.55]} />
-      <ambientLight intensity={0.2} />
+      <hemisphereLight args={["#cfe6ff", "#3a3222", 0.7]} />
       <directionalLight
         position={[9, 14, 8]}
-        intensity={1.5}
+        intensity={2.6}
+        color="#fff1dc"
         castShadow
         shadow-bias={-0.0008}
         shadow-normalBias={0.04}
@@ -73,9 +69,8 @@ export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectV
         shadow-camera-top={14}
         shadow-camera-bottom={-14}
       />
-      <pointLight position={[-12, 6, -8]} intensity={18} color="#1f6bff" distance={40} />
 
-      <Terrain layer={layer} timeline={timeline} />
+      <Terrain layer={layer} timeline={timeline} onHover={onHover} />
       <Markers
         layer={layer}
         timeline={timeline}
@@ -100,25 +95,12 @@ export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectV
         <Lightformer intensity={0.4} color="#7fd4ff" position={[-8, 2, -2]} rotation-y={Math.PI / 2} scale={[20, 2, 1]} />
         <Lightformer intensity={0.3} color="#ffb070" position={[8, 2, 3]} rotation-y={-Math.PI / 2} scale={[20, 2, 1]} />
       </Environment>
-      <Stars radius={60} depth={30} count={1800} factor={2.5} fade speed={0.4} />
-      <Sparkles count={70} scale={[24, 3, 20]} position={[0, 1.5, 0]} size={2} speed={0.25} color="#8fe9ff" opacity={0.5} />
 
       <EffectComposer multisampling={0}>
         <SMAA />
-        <Bloom intensity={0.6} luminanceThreshold={0.9} luminanceSmoothing={0.2} mipmapBlur />
-        <Vignette offset={0.25} darkness={0.7} />
+        <Bloom intensity={0.25} luminanceThreshold={0.95} luminanceSmoothing={0.2} mipmapBlur />
+        <Vignette offset={0.3} darkness={0.45} />
       </EffectComposer>
-
-      {/* grade técnica do laboratório */}
-      <gridHelper
-        args={[
-          Math.max(LON_MAX - LON_MIN, LAT_MAX - LAT_MIN) * SCALE,
-          28,
-          "#123a4a",
-          "#0b1d28",
-        ]}
-        position={[0, -2.2, 0]}
-      />
 
       <CameraRig target={target} dist={region.dist} flyKey={region.id} />
     </>
