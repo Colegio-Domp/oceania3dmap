@@ -19,6 +19,7 @@ interface Props {
   region: Region;
   selectedVolcano: string | null;
   onSelectVolcano: (v: Volcano) => void;
+  onHover?: (x: number, z: number, h: number | null) => void;
 }
 
 function RegionFrame({ region }: { region: Region }) {
@@ -41,7 +42,7 @@ function RegionFrame({ region }: { region: Region }) {
   return <Line points={points} color="#38e8ff" lineWidth={1.4} transparent opacity={0.75} />;
 }
 
-export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectVolcano }: Props) {
+export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectVolcano, onHover }: Props) {
   const target: [number, number, number] = [
     lonToX(region.center[0]),
     0,
@@ -69,7 +70,7 @@ export function AtlasScene({ layer, timeline, region, selectedVolcano, onSelectV
         shadow-camera-bottom={-14}
       />
 
-      <Terrain layer={layer} timeline={timeline} />
+      <Terrain layer={layer} timeline={timeline} onHover={onHover} />
       <Markers
         layer={layer}
         timeline={timeline}
